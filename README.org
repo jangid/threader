@@ -1,0 +1,34 @@
+#+title: Threader for X
+
+Post threads on Twitter X using this python program. Just run with ~python x.py~. There are just two prerequisits.
+
+1. File tweets.json
+   #+begin_src js
+   {
+     "thread": [
+       {
+         "id": 1,
+         "text": "🚀 First post of the thread."
+       },
+       {
+         "id": 2,
+         "text": "📰 Second post."
+       },
+       {
+         "id": 3,
+         "text": "🛡️ Third post."
+       },
+       {
+         "id": 4,
+         "text": "🔍 Fourth post."
+       },
+       {
+         "id": 5,
+         "text": "💥 And so on..."
+       }
+     ]
+   }
+   #end_src
+2. Environment variables for authentication
+   1. CONSUMER_KEY
+   2. CONSUMER_SECRET
