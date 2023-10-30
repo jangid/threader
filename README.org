@@ -1,4 +1,4 @@
-#+title: Threader for X
+#+title: Threader for X, formerly Twitter
 
 Post threads on Twitter X using this python program. Just run with ~python x.py~. There are just two prerequisits.
 
