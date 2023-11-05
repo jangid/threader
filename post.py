@@ -1,14 +1,18 @@
+# post.py
+
 import config
 
 
-def post_tweet(oauth, content, in_reply_to_tweet_id=None):
+def post_tweet(oauth, content, in_reply_to_tweet_id=None, media_ids=None):
     """
-    Posts a tweet with the given content.
+    Posts a tweet with the given content and media attachments.
     If in_reply_to_tweet_id is provided, the new tweet will be a reply to it.
     Returns the ID of the tweet that was posted.
     """
     # Construct the payload based on parameters
     payload = {"text": content}
+    if media_ids:
+        payload["media"] = {"media_ids": media_ids}
 
     # If this tweet is a reply to another, set the appropriate fields
     if in_reply_to_tweet_id:

@@ -1,3 +1,5 @@
+# config.py
+
 import os
 
 # Assuming you've already set these environment variables
@@ -8,3 +10,4 @@ REQUEST_TOKEN_URL = "https://api.twitter.com/oauth/request_token?oauth_callback=
 AUTHORIZATION_BASE_URL = "https://api.twitter.com/oauth/authorize"
 ACCESS_TOKEN_URL = "https://api.twitter.com/oauth/access_token"
 TWEET_URL = "https://api.twitter.com/2/tweets"
+MEDIA_UPLOAD_URL = "https://upload.twitter.com/1.1/media/upload.json"
