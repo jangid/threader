@@ -9,6 +9,10 @@ def upload_media(oauth, media_source):
     Uploads media to Twitter and returns the media ID.
     The media_source can be a local file path or a remote URL.
     """
+    # Remove the file scheme if it is present
+    if media_source.startswith('file://'):
+        media_source = media_source[7:]
+
     if media_source.startswith('http://') or media_source.startswith('https://'):
         # Media source is a URL
         response = requests.get(media_source)
@@ -17,8 +21,11 @@ def upload_media(oauth, media_source):
         media_data = response.content
     else:
         # Media source is a local file path
-        with open(media_source, 'rb') as file:
-            media_data = file.read()
+        try:
+            with open(media_source, 'rb') as file:
+                media_data = file.read()
+        except FileNotFoundError:
+            raise Exception(f"No such file or directory: '{media_source}'")
 
     media_endpoint_url = config.MEDIA_UPLOAD_URL
     files = {'media': media_data}
