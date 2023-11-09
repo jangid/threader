@@ -1,10 +1,13 @@
 # x.py
 
 import sys
+import json
+import time
+import random
 from oauth import get_oauth_session
 from post import post_tweet
 from media import upload_media
-from scrap import get_html_content
+from scrap import get_text_content
 from chatgpt import generate_thread  # Assuming you have a function to generate threads using ChatGPT
 
 
@@ -15,12 +18,15 @@ def main():
         sys.exit(1)
 
     url = sys.argv[1]
-    content = get_html_content(url)
+    content = get_text_content(url)
 
     # Step 2: Parse content and create json thread using chatgpt api
-    thread_data = generate_thread(content, url)  # This function should return the thread data in the required JSON format
+    thread_data = {}
+    while True:
+        thread_data = generate_thread(content, url)
+        if isinstance(thread_data, dict):
+            break
 
-    print(thread_data)
     # Loop to handle user input
     while True:
         # Step 3: Ask user to confirm if tweets should be posted
@@ -30,7 +36,7 @@ def main():
             # Step 6: Post tweets if user says Yes
             oauth = get_oauth_session()
             previous_tweet_id = None
-            for tweet_data in thread_data:
+            for tweet_data in thread_data["thread"]:
                 tweet_text = tweet_data["text"]
                 media_ids = []
                 # Check for attachments and upload them
@@ -42,11 +48,12 @@ def main():
                 # Pass media_ids to post_tweet function
                 response = post_tweet(oauth, tweet_text, previous_tweet_id, media_ids)
                 previous_tweet_id = response
+                time.sleep(random.randint(30, 60))
             print("Thread posted successfully!")
             break
         elif user_input in ['regenerate', 'r']:
             # Step 5: Regenerate the thread if the user is not satisfied
-            thread_data = generate_thread(content)  # Regenerate the thread
+            thread_data = generate_thread(content, url)  # Regenerate the thread
         elif user_input in ['abort', 'a']:
             # Step 7: Abort if user decides not to post
             print("Operation aborted by the user.")
