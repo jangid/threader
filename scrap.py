@@ -28,7 +28,8 @@ def get_text_content(url):
     driver.quit()
 
     # Use BeautifulSoup to parse and clean up the HTML content
-    soup = BeautifulSoup(Document(html_content).summary(), 'html.parser')
+    # soup = BeautifulSoup(Document(html_content).summary(), 'html.parser')
+    soup = BeautifulSoup(html_content, 'html.parser')
 
     # Remove script and style elements
     for script_or_style in soup(["script", "style", "noscript"]):

@@ -1,6 +1,7 @@
 # post.py
 
 import config
+import json
 
 
 def post_tweet(oauth, content, in_reply_to_tweet_id=None, media_ids=None):
@@ -30,3 +31,18 @@ def post_tweet(oauth, content, in_reply_to_tweet_id=None, media_ids=None):
 
     # Return the ID of the tweet that was just posted
     return json_response["data"]["id"]
+
+
+# Function to check for tweets longer than 160 characters
+def is_tweet_long(json_data):
+    # Load the thread data from the JSON
+    thread_data = json_data
+
+    # Iterate over each tweet and check its length
+    for tweet in thread_data["thread"]:
+        if len(tweet["text"]) > 280:
+            print(f'Tweet with id {tweet["id"]} is longer than 280 characters.')
+            return True  # Return True if a long tweet is found
+
+    print("All tweets are within the 160-character limit.")
+    return False  # Return False if all tweets are within the limit

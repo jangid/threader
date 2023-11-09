@@ -5,7 +5,7 @@ import json
 import time
 import random
 from oauth import get_oauth_session
-from post import post_tweet
+from post import post_tweet, is_tweet_long
 from media import upload_media
 from scrap import get_text_content
 from chatgpt import generate_thread  # Assuming you have a function to generate threads using ChatGPT
@@ -25,7 +25,8 @@ def main():
     while True:
         thread_data = generate_thread(content, url)
         if isinstance(thread_data, dict):
-            break
+            if is_tweet_long(thread_data) is False:
+                break
 
     # Loop to handle user input
     while True:
@@ -53,7 +54,12 @@ def main():
             break
         elif user_input in ['regenerate', 'r']:
             # Step 5: Regenerate the thread if the user is not satisfied
-            thread_data = generate_thread(content, url)  # Regenerate the thread
+            thread_data = {}
+            while True:
+                thread_data = generate_thread(content, url)
+                if isinstance(thread_data, dict):
+                    if is_tweet_long(thread_data) is False:
+                        break
         elif user_input in ['abort', 'a']:
             # Step 7: Abort if user decides not to post
             print("Operation aborted by the user.")
