@@ -40,8 +40,8 @@ def is_tweet_long(json_data):
 
     # Iterate over each tweet and check its length
     for tweet in thread_data["thread"]:
-        if len(tweet["text"]) > 280:
-            print(f'Tweet with id {tweet["id"]} is longer than 280 characters.')
+        if len(tweet["text"]) > config.TWEET_LENGTH:
+            print(f'Tweet with id {tweet["id"]} is longer than {config.TWEET_LENGTH} characters.')
             return True  # Return True if a long tweet is found
 
     print("All tweets are within the 160-character limit.")

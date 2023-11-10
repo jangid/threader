@@ -1,45 +1,35 @@
 # scrap.py
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from bs4 import BeautifulSoup
-from readability import Document
-from markdownify import markdownify as md
-import requests
-import os
+from urllib.parse import urlparse
+from default_scraper import get_default_readable_markdown
+import nyt_scraper
+import sys
+
+
+def validate_args():
+    if len(sys.argv) < 2:
+        print("Usage: python x.py <URL>")
+        sys.exit(1)
 
 
 def get_readable_markdown(url):
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Ensures the browser window isn't shown
+    # Parse the URL to extract the domain
+    parsed_url = urlparse(url)
+    domain = parsed_url.netloc
 
-    # Initialize the Chrome driver
-    driver = webdriver.Chrome(options=chrome_options)
-    driver.get(url)
-
-    # Wait for the JavaScript to be idle (i.e., wait for the page to fully load)
-    WebDriverWait(driver, 10).until(
-        lambda d: d.execute_script('return document.readyState') == 'complete'
-    )
-
-    # Retrieve and store the page source
-    html_content = driver.page_source
-
-    # Close the driver
-    driver.quit()
-
-    # Process the content with Readability
-    doc = Document(html_content)
-    soup = BeautifulSoup(doc.summary(), 'html.parser')
-
-    # Convert HTML to Markdown
-    markdown_content = md(str(soup), heading_style="ATX")
-    return markdown_content
+    if 'nytimes.com' in domain:
+        scraper = nyt_scraper.Scraper()
+        # Use New York Times specific scraping method
+        article = scraper.get_article(url)
+        return article.title
+    else:
+        # Use the default scraping method
+        return get_default_readable_markdown(url)
 
 
-# Example usage:
+# Example usage
 if __name__ == "__main__":
-    url = "https://www.theguardian.com/science/2023/nov/05/how-maths-can-help-you-win-at-everything"
+    validate_args()
+    url = sys.argv[1]
     content = get_readable_markdown(url)
     print(content)

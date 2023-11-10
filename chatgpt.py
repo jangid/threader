@@ -114,7 +114,8 @@ def get_thread(content, url):
     10. Combine multiple tweets into an array like this:
         {thread_format}
     11. Maintain a respectful tone throughout the thread.
-    12. Tweet length strictly should not be greater than {config.TWEET_LENGTH} characters.
+    12. Add emojies if relevant.
+    13. Tweet length strictly should not be greater than {config.TWEET_LENGTH} characters.
 
     '''
 
