@@ -7,7 +7,8 @@ from oauth import get_oauth_session
 from post import post_tweet, is_tweet_long
 from media import upload_media
 from scrap import get_readable_markdown
-from chatgpt import generate_thread  # Assuming you have a function to generate threads using ChatGPT
+from chatgpt import generate_thread
+import config
 
 
 def validate_args():
@@ -25,7 +26,7 @@ def handle_tweets(thread_data):
         # Pass media_ids to post_tweet function
         response = post_tweet(oauth, tweet_text, previous_tweet_id, media_ids)
         previous_tweet_id = response
-        time.sleep(random.randint(30, 60))
+        time.sleep(random.randint(config.TWEET_GAP_MIN, config.TWEET_GAP_MAX))
     print("Thread posted successfully!")
 
 
