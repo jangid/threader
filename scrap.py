@@ -5,10 +5,12 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from bs4 import BeautifulSoup
 from readability import Document
+from markdownify import markdownify as md
 import requests
+import os
 
 
-def get_text_content(url):
+def get_readable_markdown(url):
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Ensures the browser window isn't shown
 
@@ -27,43 +29,17 @@ def get_text_content(url):
     # Close the driver
     driver.quit()
 
-    # Use BeautifulSoup to parse and clean up the HTML content
-    # soup = BeautifulSoup(Document(html_content).summary(), 'html.parser')
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    # Remove script and style elements
-    for script_or_style in soup(["script", "style", "noscript"]):
-        script_or_style.decompose()
-
-    # Get the text content of the webpage
-    text_content = soup.get_text(separator=' ', strip=True)
-
-    # Return the text content
-    return text_content
-
-
-def get_readable_text(url):
-    response = requests.get(url)
-    print(response.text)
-    exit(0)
-    doc = Document(response.text)
+    # Process the content with Readability
+    doc = Document(html_content)
     soup = BeautifulSoup(doc.summary(), 'html.parser')
 
-    # Optional: remove unwanted tags like script, style, etc.
-    for script_or_style in soup(["script", "style", "noscript"]):
-        script_or_style.decompose()
-
-    # Get the text content of the webpage
-    text_content = soup.get_text(separator=' ', strip=True)
-    return text_content
+    # Convert HTML to Markdown
+    markdown_content = md(str(soup), heading_style="ATX")
+    return markdown_content
 
 
 # Example usage:
 if __name__ == "__main__":
-    # url = "https://www.theguardian.com/science/2023/nov/05/how-maths-can-help-you-win-at-everything"
-    # content = get_text_content(url)
-    # print(content)
-    # print("--------------------------------------------------------")
     url = "https://www.theguardian.com/science/2023/nov/05/how-maths-can-help-you-win-at-everything"
-    content = get_readable_text(url)
+    content = get_readable_markdown(url)
     print(content)

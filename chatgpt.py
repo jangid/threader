@@ -3,14 +3,16 @@
 import os
 import json
 from openai import OpenAI
+import config
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 
-def get_completion(messages, model="gpt-3.5-turbo"):
+def get_completion(messages, response_format={"type": "text"}, model="gpt-3.5-turbo-1106"):
     completion = client.chat.completions.create(
         model=model,
-        messages=messages
+        messages=messages,
+        response_format=response_format
     )
     return completion.choices[0].message.content
 
@@ -18,7 +20,7 @@ def get_completion(messages, model="gpt-3.5-turbo"):
 def get_summary(content):
     prompt = f"""
 
-    Summarize the following text in less than 2000 words:
+    Summarize the following text in less than {config.SUMMARY_SIZE_IN_WORDS} words:
 
     {content}
 
@@ -33,7 +35,7 @@ def get_summary(content):
     return summary
 
 
-def generate_thread(content, url):
+def get_thread(content, url):
     advice = f'''
 
 Please generate a Twitter thread in strict JSON format, adhering to the following guidelines:
@@ -92,13 +94,9 @@ Content:
 
     '''
 
-    print("CONTENT:")
     print(content)
-    if len(content.split()) > 2000:
+    if len(content.split()) > config.SUMMARY_SIZE_IN_WORDS:
         content = get_summary(content)
-        # words = prompt.split()
-        # truncated_words = words[:2000]
-        # prompt = ' '.join(truncated_words)
         print("SUMMARY:")
         print(content)
 
@@ -111,7 +109,9 @@ Content:
 
     while True:
         try:
-            json_string = get_completion(messages=messages)
+            json_string = get_completion(messages=messages, response_format={
+                "type": "json_object"
+            })
             thread_data = json.loads(json_string)
             break
         except json.JSONDecodeError:
@@ -120,10 +120,13 @@ Content:
             messages.append({"role": "user", "content": "Generate in JSON format as specified"})
             thread_data = {}
 
-    print("OUTPUT:")
-    # Now, thread_data is guaranteed to be a dictionary if the JSON was valid
-    print(isinstance(thread_data, dict))  # This will always print True if thread_data is a dict
+    return thread_data
 
+
+def generate_thread(content, url):
+
+    thread_data = get_thread(content, url)
+    print("OUTPUT:")
     # If you want to pretty-print the dictionary
     print(json.dumps(thread_data, indent=4, ensure_ascii=False))
 

@@ -11,3 +11,6 @@ AUTHORIZATION_BASE_URL = "https://api.twitter.com/oauth/authorize"
 ACCESS_TOKEN_URL = "https://api.twitter.com/oauth/access_token"
 TWEET_URL = "https://api.twitter.com/2/tweets"
 MEDIA_UPLOAD_URL = "https://upload.twitter.com/1.1/media/upload.json"
+
+# Parameters
+SUMMARY_SIZE_IN_WORDS = 2500
