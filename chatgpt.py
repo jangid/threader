@@ -93,6 +93,12 @@ def get_thread(content, url):
         }
     '''
 
+    photo_format = '''
+       {
+         "photo": "photo_url_here"
+       }
+    '''
+
     steps = f'''
 
     ------------------------------------------------------------------
@@ -104,18 +110,20 @@ def get_thread(content, url):
     1. Read the article provided below in markdown format.
     2. Prepare a thread of 5 to 10 tweets, summarizing the essense of the article. Keep the number of tweets to minimum.
     3. First tweet should introduce the topic of the article.
-    4. Add twitter handle of the publisher in the first tweet.
+    4. Add twitter handle of the publisher in the first tweet. Don't start the tweet with twitter handle.
     5. Last tweet should conclude the article with source url {url}.
-    6. If found in article, include relevant photos in the tweets.
-    7. Example of a single tweet is given below. Field "id", "text" are mandatory. Optional field "attachment" is an array of objects containing field "photo".
+    6. If found in article, include full url to relevant photos. Don't include if full url is not available.
+    7. Example format for including photo:
+       {photo_format}
+    8. Example of a single tweet is given below. Field "id", "text" are mandatory. Optional field "attachment" is an array of objects containing field "photo".
        {tweet_format}
-    8. Think of hashtags to make tweets easily discoverable and to enhance engagement.
-    9. Add hashtags to the prepared tweets. Select hashtags relevant to the article and the tweet.
-    10. Combine multiple tweets into an array like this:
+    9. Think of hashtags to make tweets easily discoverable and to enhance engagement.
+    10. Add hashtags to the prepared tweets. Select hashtags relevant to the article and the tweet.
+    11. Combine multiple tweets into an array like this:
         {thread_format}
-    11. Maintain a respectful tone throughout the thread.
-    12. Add emojies if relevant.
-    13. Tweet length strictly should not be greater than {config.TWEET_LENGTH} characters.
+    12. Maintain a respectful tone throughout the thread.
+    13. Add emojies if relevant.
+    14. Tweet length strictly should not be greater than {config.TWEET_LENGTH} characters.
 
     '''
 
