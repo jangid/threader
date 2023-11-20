@@ -7,8 +7,11 @@ import requests
 
 
 def get_noscript_readable_markdown(url):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0'
+    }
     # Send a GET request to the webpage
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
 
     # Check if the request was successful
     if response.status_code == 200:
