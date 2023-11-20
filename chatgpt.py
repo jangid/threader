@@ -47,7 +47,7 @@ def get_summary(content):
     return summary
 
 
-def get_thread(content, url):
+def get_thread_prompt(url):
     tweet_format = '''
        {
          "id": "1",
@@ -127,6 +127,11 @@ def get_thread(content, url):
 
     '''
 
+    return steps
+
+
+def get_thread(content, url):
+
     print(content)
     if len(content.split()) > config.SUMMARY_SIZE_IN_WORDS:
         content = get_summary(content)
@@ -143,7 +148,7 @@ def get_thread(content, url):
 
     '''
 
-    prompt = steps + content
+    prompt = get_thread_prompt(url) + content
 
     messages = [
         {"role": "system", "content": "You are a journalist, skilled in reporting news on twitter."},
@@ -174,3 +179,8 @@ def generate_thread(content, url):
     print(json.dumps(thread_data, indent=4, ensure_ascii=False))
 
     return thread_data
+
+
+# Example usage
+if __name__ == "__main__":
+    print(get_thread_prompt("http://example.com"))

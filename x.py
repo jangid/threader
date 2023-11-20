@@ -55,7 +55,7 @@ def regenerate_thread(content, url):
 def main():
     validate_args()
     url = sys.argv[1]
-    content = get_readable_markdown(url)
+    content = get_readable_markdown(url, True)
     thread_data = regenerate_thread(content, url)
 
     while True:
