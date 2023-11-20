@@ -1,35 +1,20 @@
-#+title: Threader for X, formerly Twitter
+#+title: Threader for X, Formerly Twitter
 
-Post threads on Twitter X using this python program. Just run with ~python x.py~. There are just two prerequisits.
+* Introduction
+Threader for X is a Python program designed to post threads on Twitter X using just a content URL. It simplifies the process of creating and posting tweet threads from web content.
 
-1. File tweets.json
-   #+begin_src js
-   {
-     "thread": [
-       {
-         "id": 1,
-         "text": "🚀 First post of the thread."
-       },
-       {
-         "id": 2,
-         "text": "📰 Second post."
-       },
-       {
-         "id": 3,
-         "text": "🛡️ Third post."
-       },
-       {
-         "id": 4,
-         "text": "🔍 Fourth post."
-       },
-       {
-         "id": 5,
-         "text": "💥 And so on..."
-       }
-     ]
-   }
-   #+end_src
+* Usage
+To use the program, run the command ~python x.py~. This will dump the site content into a cache file located within the ~.threader_cache~ directory. Additionally, the generated tweet threads are saved as JSON files in the same directory.
 
-2. Environment variables for authentication
-   1. CONSUMER_KEY
-   2. CONSUMER_SECRET
+** Basic Command
+#+begin_src shell
+python x.py [-cache] URL
+#+end_src
+
+* Prerequisites
+To successfully use Threader for X, the following environment variables are required for authentication:
+
+  1. CONSUMER_KEY
+  2. CONSUMER_SECRET
+
+Ensure these variables are set with the appropriate values before running the program.
